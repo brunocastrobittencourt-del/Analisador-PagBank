@@ -1,0 +1,10 @@
+AnalisadorPagBank/
+│
+├── analisador.py
+├── interface.py
+├── leitor_pdf.py
+├── filtros.py
+├── excel.py
+├── config.json
+├── requirements.txt
+└── README.txt
