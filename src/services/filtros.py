@@ -1,38 +1,37 @@
 class Filtros:
 
     NOMES_EXCLUIDOS = [
-
         "ZELINDA AMARANTE DE LIMA",
-
         "JULIA DE LIMA CABRAL"
-
     ]
 
     TIPOS_EXCLUIDOS = [
-
         "PIX_ENVIADO",
-
         "CDB",
-
         "SALDO",
-
         "ESTORNO"
-
     ]
 
     @classmethod
     def filtrar(cls, movimentacoes):
 
-        resultado = []
+        movimentacoes_validas = []
+        movimentacoes_excluidas = []
 
         for mov in movimentacoes:
 
+            motivo = None
+
             if mov.tipo in cls.TIPOS_EXCLUIDOS:
-                continue
+                motivo = mov.tipo
 
-            if mov.nome.upper() in cls.NOMES_EXCLUIDOS:
-                continue
+            elif mov.nome.upper() in cls.NOMES_EXCLUIDOS:
+                motivo = "FAMILIAR"
 
-            resultado.append(mov)
+            if motivo:
+                mov.motivo_exclusao = motivo
+                movimentacoes_excluidas.append(mov)
+            else:
+                movimentacoes_validas.append(mov)
 
-        return resultado
+        return movimentacoes_validas, movimentacoes_excluidas

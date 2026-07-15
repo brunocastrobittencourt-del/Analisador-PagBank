@@ -1,3 +1,4 @@
+from datetime import datetime
 from openpyxl import Workbook
 import os
 
@@ -17,9 +18,16 @@ class GeradorExcel:
 
         linha = 2
 
-        for data, valor in totais.items():
+        datas_ordenadas = sorted(
+            totais.keys(),
+            key=lambda data: datetime.strptime(data, "%d/%m/%Y")
+        )
+
+        for data in datas_ordenadas:
+
             ws.cell(row=linha, column=1).value = data
-            ws.cell(row=linha, column=2).value = round(valor, 2)
+            ws.cell(row=linha, column=2).value = round(totais[data], 2)
+
             linha += 1
 
         caminho = os.path.join(
@@ -30,7 +38,6 @@ class GeradorExcel:
         wb.save(caminho)
 
         return caminho
-
 
     @staticmethod
     def gerar_movimentacoes(movimentacoes, pasta_resultados):
@@ -66,7 +73,6 @@ class GeradorExcel:
 
         return caminho
 
-
     @staticmethod
     def gerar_resumo(
         receita_total,
@@ -83,7 +89,6 @@ class GeradorExcel:
         ws.title = "Resumo Financeiro"
 
         ws.append(["Indicador", "Valor"])
-
         ws.append(["Receita Total", receita_total])
         ws.append(["Quantidade de Dias", quantidade_dias])
         ws.append(["Média Diária", media_diaria])
@@ -93,6 +98,40 @@ class GeradorExcel:
         caminho = os.path.join(
             pasta_resultados,
             "Resumo_Financeiro.xlsx"
+        )
+
+        wb.save(caminho)
+
+        return caminho
+
+    @staticmethod
+    def gerar_excluidas(movimentacoes, pasta_resultados):
+
+        wb = Workbook()
+        ws = wb.active
+
+        ws.title = "Movimentações Excluídas"
+
+        ws.append([
+            "Data",
+            "Motivo",
+            "Nome",
+            "Valor",
+            "Descrição"
+        ])
+
+        for mov in movimentacoes:
+            ws.append([
+                mov.data,
+                getattr(mov, "motivo_exclusao", ""),
+                mov.nome,
+                mov.valor,
+                mov.descricao
+            ])
+
+        caminho = os.path.join(
+            pasta_resultados,
+            "Movimentacoes_Excluidas.xlsx"
         )
 
         wb.save(caminho)

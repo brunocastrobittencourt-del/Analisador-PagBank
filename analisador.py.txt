@@ -1,10 +1,15 @@
-AnalisadorPagBank/
-│
-├── analisador.py
-├── interface.py
-├── leitor_pdf.py
-├── filtros.py
-├── excel.py
-├── config.json
-├── requirements.txt
-└── README.txt
+import pdfplumber
+import os
+
+arquivo = r"C:\AnalisePagBank\arquivos\EXTRATOS ZELINDA.pdf"
+
+with pdfplumber.open(arquivo) as pdf:
+    print(f"Total de páginas: {len(pdf.pages)}")
+
+    pagina = pdf.pages[0]
+
+    texto = pagina.extract_text()
+
+    print("\n===== TEXTO DA PRIMEIRA PÁGINA =====\n")
+
+    print(texto)

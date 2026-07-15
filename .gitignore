@@ -1,0 +1,23 @@
+# Cache do Python
+__pycache__/
+*.pyc
+
+# Ambiente virtual
+.venv/
+venv/
+
+# VS Code
+.vscode/
+
+# PDFs dos clientes
+arquivos/*.pdf
+
+# Resultados gerados
+resultados/
+
+# Logs
+logs/
+
+# Arquivos temporários
+*.log
+*.tmp

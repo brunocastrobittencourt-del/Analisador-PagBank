@@ -1,4 +1,5 @@
 from collections import defaultdict
+from datetime import datetime
 
 
 class Agrupador:
@@ -15,4 +16,9 @@ class Agrupador:
 
             totais[mov.data] += mov.valor
 
-        return dict(sorted(totais.items()))
+        return dict(
+            sorted(
+                totais.items(),
+                key=lambda item: datetime.strptime(item[0], "%d/%m/%Y")
+            )
+        )
