@@ -1,0 +1,17 @@
+"""
+Teste automático
+"""
+
+import unittest
+
+
+class TestParser(unittest.TestCase):
+
+    def test_parser(self):
+
+        self.assertTrue(True)
+
+
+if __name__ == "__main__":
+
+    unittest.main()

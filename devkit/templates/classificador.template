@@ -1,0 +1,11 @@
+"""
+Classificador: {{CLASSE}}
+"""
+
+
+class {{CLASSE}}:
+
+    @staticmethod
+    def classificar(movimentacao):
+
+        return movimentacao

@@ -1,0 +1,10 @@
+"""
+Exportador: {{CLASSE}}
+"""
+
+
+class {{CLASSE}}:
+
+    def exportar(self, dados):
+
+        pass

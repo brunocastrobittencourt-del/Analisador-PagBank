@@ -1,0 +1,11 @@
+"""
+Model: {{CLASSE}}
+"""
+
+from dataclasses import dataclass
+
+
+@dataclass
+class {{CLASSE}}:
+
+    pass

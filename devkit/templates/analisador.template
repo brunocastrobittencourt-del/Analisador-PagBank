@@ -1,0 +1,10 @@
+"""
+Analisador: {{CLASSE}}
+"""
+
+
+class {{CLASSE}}:
+
+    def executar(self, movimentacoes):
+
+        return movimentacoes

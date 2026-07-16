@@ -1,0 +1,46 @@
+"""
+Parser: {{NOME}}
+
+Arquivo gerado automaticamente.
+
+Projeto:
+Analisador Financeiro
+
+Responsabilidade:
+- Identificar o layout do banco
+- Extrair registros brutos
+- Converter para Movimentacao
+
+Autor:
+Bruno Bittencourt
+"""
+
+from src.parsers.base_parser import BaseParser
+from src.parsers.motor_parser import MotorParser
+
+
+class {{CLASSE}}(BaseParser):
+
+    def __init__(self):
+
+        self.motor = MotorParser()
+
+    def identificar(self, paginas):
+
+        """
+        Retorna True se o parser reconhecer o layout.
+        """
+        return False
+
+    def processar(self, paginas):
+
+        """
+        Processa todas as páginas.
+        """
+        movimentacoes = []
+
+        # TODO:
+        # implementar leitura
+
+        return movimentacoes
+
