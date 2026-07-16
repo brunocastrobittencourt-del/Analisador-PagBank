@@ -1,7 +1,7 @@
 from collections import defaultdict
 from datetime import datetime
 
-from models.apuracao import Apuracao
+from src.models.apuracao import Apuracao
 
 
 class MontadorApuracao:
@@ -11,7 +11,17 @@ class MontadorApuracao:
 
         apuracao = Apuracao()
 
-        # Agrupamento por mês e dia
+        # ==========================
+        # Cabeçalho
+        # ==========================
+
+        apuracao.banco = "PAGBANK"
+        apuracao.processo = "CCMCMV"
+
+        # ==========================
+        # Agrupamento
+        # ==========================
+
         meses = defaultdict(lambda: defaultdict(float))
 
         for mov in movimentacoes:
@@ -26,15 +36,17 @@ class MontadorApuracao:
                     "%d/%m/%Y"
                 )
 
-            except Exception:
-
+            except ValueError:
                 continue
 
             chave_mes = data.strftime("%m/%Y")
 
             meses[chave_mes][data.day] += mov.valor
 
-        # Ordena os meses cronologicamente
+        # ==========================
+        # Ordenação
+        # ==========================
+
         meses_ordenados = sorted(
             meses.keys(),
             key=lambda m: datetime.strptime(
@@ -43,7 +55,8 @@ class MontadorApuracao:
             )
         )
 
-        # Remove o primeiro mês se ele for parcial
+        # Remove primeiro mês parcial
+
         if meses_ordenados:
 
             primeiro = meses_ordenados[0]
@@ -56,12 +69,17 @@ class MontadorApuracao:
 
                 meses_ordenados.pop(0)
 
-        # Mantém apenas os últimos 6 meses
+        # Mantém somente os últimos 6 meses
+
         meses_ordenados = meses_ordenados[-6:]
 
         estrutura = {}
 
         totais = {}
+
+        # ==========================
+        # Montagem da estrutura
+        # ==========================
 
         for mes in meses_ordenados:
 
@@ -87,6 +105,10 @@ class MontadorApuracao:
                 2
             )
 
+        # ==========================
+        # Resultado
+        # ==========================
+
         apuracao.meses = estrutura
 
         apuracao.total_meses = totais
@@ -99,8 +121,9 @@ class MontadorApuracao:
 
             apuracao.media = round(
 
-                sum(totais.values())
-
+                sum(
+                    totais.values()
+                )
                 / apuracao.quantidade_meses,
 
                 2

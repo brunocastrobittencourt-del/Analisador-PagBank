@@ -1,6 +1,7 @@
-from services.leitor_pdf import LeitorPDF
-from services.parser import ParserExtrato
-from services.filtros import Filtros
+from src.services.leitor_pdf import LeitorPDF
+from src.services.filtros import Filtros
+from src.parsers.parser_factory import ParserFactory
+from src.normalizadores.normalizador import Normalizador
 
 
 class ProcessadorExtrato:
@@ -20,9 +21,17 @@ class ProcessadorExtrato:
 
         paginas = leitor.extrair_texto()
 
-        print("\nProcessando movimentações...")
+        print("\nSelecionando parser...")
 
-        parser = ParserExtrato()
+        parser = ParserFactory.obter(
+            paginas
+        )
+
+        print(
+            f"Parser selecionado: {parser.__class__.__name__}"
+        )
+
+        print("\nExtraindo movimentações...")
 
         movimentacoes = parser.processar(
             paginas
@@ -31,6 +40,14 @@ class ProcessadorExtrato:
         print(
             f"Movimentações encontradas: {len(movimentacoes)}"
         )
+
+        print("\nNormalizando movimentações...")
+
+        movimentacoes = Normalizador.normalizar(
+            movimentacoes
+        )
+
+        print("\nAplicando filtros...")
 
         movimentacoes, movimentacoes_excluidas = Filtros.filtrar(
             movimentacoes

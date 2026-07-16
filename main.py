@@ -1,18 +1,18 @@
 import os
 
-from config.config import (
+from src.config.config import (
     PASTA_ARQUIVOS,
-    PASTA_RESULTADOS
+    PASTA_RESULTADOS,
+    MODELO_APURACAO
 )
 
-from services.processador import ProcessadorExtrato
-from services.montador_apuracao import MontadorApuracao
-from excel.apuracao_renda import ApuracaoRenda
+from src.services.processador import ProcessadorExtrato
+from src.services.montador_apuracao import MontadorApuracao
+from src.excel.apuracao_renda import ApuracaoRenda
 
 
 def main():
 
-    # Procura o primeiro PDF da pasta
     arquivos = [
         arquivo
         for arquivo in os.listdir(PASTA_ARQUIVOS)
@@ -37,7 +37,6 @@ def main():
     print("ANALISADOR FINANCEIRO")
     print("=" * 70)
 
-    # Processa o PDF
     processador = ProcessadorExtrato(
         arquivo_pdf,
         PASTA_RESULTADOS
@@ -51,7 +50,6 @@ def main():
     print("MONTANDO APURAÇÃO...")
     print("=" * 70)
 
-    # Monta a estrutura financeira
     apuracao = MontadorApuracao.montar(
         movimentacoes
     )
@@ -73,7 +71,6 @@ def main():
     print("=" * 70)
 
     for mes, total in apuracao.total_meses.items():
-
         print(f"{mes} -> R$ {total:,.2f}")
 
     print()
@@ -82,13 +79,8 @@ def main():
     print("GERANDO PLANILHA...")
     print("=" * 70)
 
-    modelo = os.path.join(
-        "templates",
-        "Modelo_Renda_Informal.xlsx"
-    )
-
     gerador = ApuracaoRenda(
-        modelo,
+        MODELO_APURACAO,
         PASTA_RESULTADOS
     )
 

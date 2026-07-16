@@ -27,12 +27,21 @@ class LeitorPDF:
 
             for numero, pagina in enumerate(pdf.pages):
 
-                print(f"Lendo página {numero+1} de {total}")
+                print(f"Lendo página {numero + 1} de {total}")
 
                 conteudo = pagina.extract_text()
 
                 if conteudo:
 
                     texto.append(conteudo)
+
+        # Apenas para depuração
+        if texto:
+
+            print("\n" + "=" * 80)
+            print("PRIMEIRA PÁGINA DO PDF")
+            print("=" * 80)
+            print(texto[0])
+            print("=" * 80)
 
         return texto
