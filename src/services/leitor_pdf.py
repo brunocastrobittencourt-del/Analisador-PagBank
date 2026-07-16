@@ -1,5 +1,7 @@
 import pdfplumber
 
+from src.models.pagina_pdf import PaginaPDF
+
 
 class LeitorPDF:
 
@@ -19,7 +21,7 @@ class LeitorPDF:
 
     def extrair_texto(self):
 
-        texto = []
+        paginas = []
 
         with pdfplumber.open(self.arquivo) as pdf:
 
@@ -29,19 +31,54 @@ class LeitorPDF:
 
                 print(f"Lendo página {numero + 1} de {total}")
 
-                conteudo = pagina.extract_text()
+                texto = pagina.extract_text() or ""
 
-                if conteudo:
+                try:
 
-                    texto.append(conteudo)
+                    layout = pagina.extract_text(
+                        layout=True
+                    ) or ""
 
-        # Apenas para depuração
-        if texto:
+                except Exception:
+
+                    layout = texto
+
+                try:
+
+                    palavras = pagina.extract_words()
+
+                except Exception:
+
+                    palavras = []
+
+                paginas.append(
+
+                    PaginaPDF(
+
+                        numero=numero + 1,
+
+                        texto=texto,
+
+                        layout=layout,
+
+                        palavras=palavras
+
+                    )
+
+                )
+
+        if paginas:
 
             print("\n" + "=" * 80)
-            print("PRIMEIRA PÁGINA DO PDF")
+            print("PRIMEIRA PÁGINA (TEXTO)")
             print("=" * 80)
-            print(texto[0])
+            print(paginas[0].texto)
+
+            print("\n" + "=" * 80)
+            print("PRIMEIRA PÁGINA (LAYOUT)")
+            print("=" * 80)
+            print(paginas[0].layout)
+
             print("=" * 80)
 
-        return texto
+        return paginas

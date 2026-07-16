@@ -15,12 +15,7 @@ class PagBankParser(BaseParser):
         if not paginas:
             return False
 
-        primeira_pagina = paginas[0].upper()
-
-        return (
-            "PAGBANK" in primeira_pagina
-            or "PAGSEGURO" in primeira_pagina
-        )
+        return "PAGBANK" in paginas[0].texto.upper()
 
     def processar(self, paginas):
 
@@ -32,7 +27,7 @@ class PagBankParser(BaseParser):
 
         for pagina in paginas:
 
-            linhas = pagina.split("\n")
+            linhas = pagina.texto.split("\n")
 
             for linha in linhas:
 
@@ -59,33 +54,36 @@ class PagBankParser(BaseParser):
                 )
 
                 try:
+
                     valor = float(valor)
 
                 except ValueError:
+
                     continue
 
-                tipo = "OUTROS"
                 nome = ""
 
                 descricao_lower = descricao.lower()
 
                 if "pix recebido" in descricao_lower:
 
-                    tipo = "PIX_RECEBIDO"
-
                     partes = descricao.split("-", 1)
 
                     if len(partes) == 2:
+
                         nome = partes[1].strip()
+
+                    tipo = "PIX_RECEBIDO"
 
                 elif "pix enviado" in descricao_lower:
 
-                    tipo = "PIX_ENVIADO"
-
                     partes = descricao.split("-", 1)
 
                     if len(partes) == 2:
+
                         nome = partes[1].strip()
+
+                    tipo = "PIX_ENVIADO"
 
                 elif "vendas - disponivel" in descricao_lower:
 
@@ -99,15 +97,28 @@ class PagBankParser(BaseParser):
 
                     tipo = "CDB"
 
+                else:
+
+                    tipo = ""
+
                 movimentacao = Movimentacao(
+
                     data=data,
+
                     descricao=descricao,
+
                     nome=nome,
+
                     tipo=tipo,
+
                     valor=valor,
+
                     considerar=True
+
                 )
 
-                self.movimentacoes.append(movimentacao)
+                self.movimentacoes.append(
+                    movimentacao
+                )
 
         return self.movimentacoes

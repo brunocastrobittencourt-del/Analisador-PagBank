@@ -32,7 +32,13 @@ class DetectorBanco:
 
             return Banco.DESCONHECIDO
 
-        texto = paginas[0].upper()
+        primeira_pagina = paginas[0]
+
+        texto = (
+            primeira_pagina.texto
+            + "\n"
+            + primeira_pagina.layout
+        ).upper()
 
         if "PAGBANK" in texto or "PAGSEGURO" in texto:
             return Banco.PAGBANK
